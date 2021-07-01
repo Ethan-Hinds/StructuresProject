@@ -10,13 +10,13 @@
 using namespace std;
 
 // Declare any methods in the main file here, before implementing them below
-void loadData(string filePath, vector<Entry>& entries);
+void loadData(string filePath, vector<Entry*>& entries);
 
 
 
 int main() {
     // Vector of all of the entries
-    vector<Entry> entries;
+    vector<Entry*> entries;
     loadData("covid-testing-all-observations.csv", entries);
     if (entries.size() == 0) {
         cout << "Unable to load data!" << endl;
@@ -24,6 +24,9 @@ int main() {
     }
     cout << "done" << endl;
     // The entries are loaded into the entires vector, and can now be accessed.
+    //cout << entries.at(0)->country << endl;
+    //cout << entries.at(0)->dateStr << endl;
+    //cout << entries.at(1)->total << endl;
 }
 
 
@@ -35,7 +38,7 @@ int main() {
 
 
 // Loads the data from the csv file and populates the entries vector with Entry objects
-void loadData(string filePath, vector<Entry>& entries) {
+void loadData(string filePath, vector<Entry*>& entries) {
     cout << "Loading data..." << endl;
     ifstream file;
     file.open(filePath);
@@ -55,7 +58,8 @@ void loadData(string filePath, vector<Entry>& entries) {
             getline(stream, total, ',');
             getline(stream, totalPerThou, ',');
             getline(stream, changeInTotalPerThou, ',');
-            entries.push_back(Entry(country, dateStr, stoi(changeInTotal), stoi(total), stof(totalPerThou), stof(changeInTotalPerThou)));
+            Entry* entry = new Entry(country, dateStr, stoi(changeInTotal), stoi(total), stof(totalPerThou), stof(changeInTotalPerThou));
+            entries.push_back(entry);
         }
     }
 }
