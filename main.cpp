@@ -23,7 +23,7 @@ int main() {
         return 0;
     }
     cout << "done" << endl;
-    // The entries are loaded into the entries vector, and can now be accessed.
+    // The entries have been loaded into the entries vector, and can now be accessed.
     //cout << entries.at(0)->country << endl;
     //cout << entries.at(0)->dateStr << endl;
     //cout << entries.at(1)->total << endl;
