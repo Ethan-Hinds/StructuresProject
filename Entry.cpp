@@ -1,5 +1,4 @@
 #include "Entry.hpp"
-#include <iostream>
 #include <string>
 #include <regex>
 

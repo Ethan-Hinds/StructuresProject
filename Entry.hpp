@@ -5,7 +5,7 @@
 using namespace std;
 
 class Entry {
-public:    
+public:
     string country;
     int dateInt; // Use this for sorting purposes.  This value is (roughly) the number of days since Jan. 1, 2000 (See comments in Entry.cpp)
     string dateStr; // This is just used temporarily for reading from the data file and maybe for displaying the date.
