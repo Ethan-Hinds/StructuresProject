@@ -18,7 +18,7 @@ Entry::Entry(string country, string dateStr, int changeInTotal, int total, float
 
 // Converts a date in m/d/yy format into days...sort of
 // Converts it into the number of days since January 1, 2000, disregarding leap years
-// It's primitive, but it works for our purposes.  Entry objects with a smaller dateInt is earlier in time
+// Entry objects with a smaller dateInt is earlier in time
 
 int Entry::dateStrToInt(string& dateStr) {
     // Regex :) Admire its beauty
