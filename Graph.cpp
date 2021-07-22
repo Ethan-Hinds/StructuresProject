@@ -213,7 +213,7 @@ void Graph::setTextLabels() {
     
     sf::Text vAxisLabel;
     vAxisLabel.setFont(font);
-    vAxisLabel.setString("Cumulative Cases");
+    vAxisLabel.setString("Cumulative Tests");
     vAxisLabel.setCharacterSize(15);
     vAxisLabel.setFillColor(sf::Color::White);
     bounds = vAxisLabel.getLocalBounds();
