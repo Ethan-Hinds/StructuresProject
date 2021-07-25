@@ -1,4 +1,7 @@
 #include "BTreeNode.h"
+#include <iostream>
+using namespace std;
+
 
 BTreeNode::BTreeNode(Entry* entry, BTreeNode* _parent) {
 	keyList[0] = entry;
@@ -33,28 +36,32 @@ BTreeNode* BTreeNode::InsertEntry(Entry* entry, BTreeNode* Head, int& inputChoic
 		Head->keyList[0] = entry;
 		return Head;
 	}
-	if (isLeaf) {
-		if (!isFull) {
+	if (Head->isLeaf) {
+		cout << "Leaf" << endl;
+		if (!(isFull)) {
+			cout << "isFull" << endl;
 			int i = 0;
 			while (i < keyCount) {
-				if (keyList[i] == nullptr || Selection(entry, inputChoice) < Selection(keyList[i], inputChoice)) {
+				if (Head->keyList[i] == nullptr || Selection(entry, inputChoice) < Selection(Head->keyList[i], inputChoice)) {
 					break;
 				}
 				i++;
 			}
 			if (i == keyCount-1) {
-				keyList[i] = entry;
+				Head->keyList[i] = entry;
 				isFull = true;
+				//cout << "true";
+
 			}
 			else {
-				Entry* shiftEntry = keyList[i];
+				Entry* shiftEntry = Head->keyList[i];
 				Entry* tempEntry;
-				keyList[i] = entry;
+				Head->keyList[i] = entry;
 				i++;
 				if (shiftEntry != nullptr) {
 					while (i < keyCount) {
-						tempEntry = keyList[i];
-						keyList[i] = shiftEntry;
+						tempEntry = Head->keyList[i];
+						Head->keyList[i] = shiftEntry;
 						shiftEntry = tempEntry;
 						if (i == keyCount - 1) {
 							isFull = true;
@@ -70,38 +77,47 @@ BTreeNode* BTreeNode::InsertEntry(Entry* entry, BTreeNode* Head, int& inputChoic
 		else {
 			Entry* tempList[keyCount + 1];
 			bool isInserted = false;
+			int j = 0;
 			for (int i = 0; i < keyCount + 1; i++) {
-				if (i == keyCount || (!isInserted && Selection(entry, inputChoice) < Selection(keyList[i], inputChoice))) {
-					tempList[i] = entry;
+				if ((i == keyCount && !isInserted) || (!isInserted && Selection(entry, inputChoice) < Selection(Head->keyList[i], inputChoice))) {
+					tempList[j] = entry;
 					isInserted = true;
-					i++;
+					j++;
+					i--;
+					//cout << "true";
 				}
-				else {
-					tempList[i] = keyList[i];
+				else if (i < keyCount) {
+					tempList[j] = Head->keyList[i];
+					j++;
 				}
-				Head = UpShift(parent, tempList, inputChoice);
-				return Head;
-
 			}
+			//for (int i = 0; i < keyCount + 1; i++) { tempList[i]->PrintEntry(); }
+			Head = UpShift(Head, parent, tempList, inputChoice);
+			return Head;
 		}
 	}
 	else {
 		int i = 0;
 		while (i < keyCount+1) {
-			if (i == keyCount || keyList[i] == nullptr || Selection(entry, inputChoice) < Selection(keyList[i], inputChoice)) {
+			cout << i << endl;
+			if (Head->keyList[i] == nullptr) { cout << "NULL" << endl; }
+			if (i == keyCount || Head->keyList[i] == nullptr || Selection(entry, inputChoice) < Selection(Head->keyList[i], inputChoice)) {
 				break;
 			}
 			i++;
 		}
-		InsertEntry(entry, nextList[i], inputChoice);
+		//cout << "1" << endl;
+		InsertEntry(entry, Head->nextList[i], inputChoice);
+		//cout << "2" << endl;
 		return Head;
 	}
 }
 
-BTreeNode* BTreeNode::UpShift(BTreeNode* parent, Entry** tempList, int& inputChoice) {
+BTreeNode* BTreeNode::UpShift(BTreeNode* Head, BTreeNode* parent, Entry** tempList, int& inputChoice) {
 	if (parent == nullptr) {
 		parent = new BTreeNode(tempList[(keyCount + 1) / 2], nullptr);
 		parent->nextList[1] = new BTreeNode(tempList[((keyCount + 1) / 2) + 1], parent);
+		parent->nextList[0] = Head;
 		for (int i = 0; i < ((keyCount + 1) / 2); i++) {
 			keyList[i] = tempList[i];
 		}
@@ -161,6 +177,7 @@ BTreeNode* BTreeNode::UpShift(BTreeNode* parent, Entry** tempList, int& inputCho
 
 
 	}
+	isFull = false;
 }
 
 

@@ -21,5 +21,5 @@ public:
 	~BTreeNode();
 	BTreeNode* InsertEntry(Entry* entry, BTreeNode* Head, int& inputChoice);
 	vector<Entry*> ReturnList(BTreeNode* Head);
-	BTreeNode* UpShift(BTreeNode* parent, Entry** tempList, int& inputChoice);
+	BTreeNode* UpShift(BTreeNode* Head, BTreeNode* parent, Entry** tempList, int& inputChoice);
 };
