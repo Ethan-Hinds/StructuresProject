@@ -14,6 +14,8 @@ public:
     float totalPerThou;
     float changeInTotalPerThou;
     Entry(string country, string dateStr, int changeInTotal, int total, float totalPerThou, float changeInTotalperThou);
+    void PrintEntry();
+    
 private:
     // Converts a date in m/d/yy into days (sort of) see comments in Entry.cpp
     int dateStrToInt(string& dateStr);

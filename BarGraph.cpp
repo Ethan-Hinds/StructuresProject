@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Text for labeling the graph beneath the x axis
 string selectionText(int inputChoice);
 
 BarGraph::BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& window) {
@@ -27,11 +28,13 @@ BarGraph::BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& wind
     colors[3] = sf::Color::Magenta;
     colors[4] = sf::Color::Cyan;
     
+    // Since the entries come in sorted, the one with the maximum value is always first
     float maxVal = Selection(data.front(), inputChoice);
     int numCountries = data.size();
     
     float barWidth = width/numCountries;
     
+    // Initialize the bars based on their value and position
     int count = 0;
     for (auto& entry : data) {
         Bar* bar = new Bar(entry, colors[count], inputChoice, y + height);
@@ -51,7 +54,7 @@ BarGraph::BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& wind
     setLegend(window);
 }
 
-
+// Show the graph, bars, legend, and axis labels
 void BarGraph::show(sf::RenderWindow& window) {
 
     sf::RectangleShape xAxis(sf::Vector2f(width + 5, 5));
@@ -65,11 +68,6 @@ void BarGraph::show(sf::RenderWindow& window) {
     window.draw(xAxis);
     window.draw(yAxis);
 
-    
-    
-    // Draw each point.  Also, check if the mouse is hovering over that point
-    // If it is, draw the info box for that point
-    // infoShown makes sure only 1 info box can be drawn at a time
     bool infoShown = false;
     for (auto& bar : bars) {
         bar->show(window);
@@ -88,6 +86,7 @@ void BarGraph::show(sf::RenderWindow& window) {
     }
 }
 
+// Destructor
 BarGraph::~BarGraph() {
     for (auto& bar : bars) {
         delete bar;
@@ -95,6 +94,7 @@ BarGraph::~BarGraph() {
 }
 
 
+// Sets the legend boxes and the legend text
 void BarGraph::setLegend(sf::RenderWindow& window) {
     int i = 0;
     for (auto& bar : bars) {
@@ -117,6 +117,8 @@ void BarGraph::setLegend(sf::RenderWindow& window) {
     }
 }
 
+
+// Set the axis labels
 void BarGraph::setTextLabels() {
     float maxVal = Selection(data.front(), inputChoice);
     sf::Text maxValText;
@@ -158,11 +160,12 @@ void BarGraph::setTextLabels() {
 }
 
 
-
+// Maps a value linearly from between min1 and max1 to min2 and max2.  Used for scaling the y axis
 float BarGraph::mapVal(float x, float min1, float max1, float min2, float max2) {
     return min2 + (((float) max2 - min2) / (max1 - min1)) * (x - min1);
 }
 
+// Formats a float with commas every 3, except if it's beyond the decimal point
 string BarGraph::formatWithCommas (float n) {
     string result = "";
     string num = to_string(n);
@@ -197,9 +200,6 @@ string BarGraph::formatWithCommas (float n) {
         }
     }
     reverse(result.begin(), result.end());
-    //    if (result.size() % 4 == 0) {
-    //        result.erase(result.begin());
-    //    }
     if (result[0] == ',') {
         result.erase(result.begin());
     }
@@ -209,6 +209,7 @@ string BarGraph::formatWithCommas (float n) {
     return result;
 }
 
+// Get the correct value depending on what data are being displayed in the graph
 float BarGraph::Selection(Entry* entry, int& inputChoice) {
     if (inputChoice == 0) { return (float)entry->dateInt; }
     else if (inputChoice == 1) { return (float)entry->total; }
@@ -217,16 +218,17 @@ float BarGraph::Selection(Entry* entry, int& inputChoice) {
     else if (inputChoice == 4) { return entry->changeInTotalPerThou; }
 }
 
-string selectionText(int inputChoice) {
+// Get the correct text for below the x axis depending on what data are being displayed in the graph
+string BarGraph::selectionText(int inputChoice) {
     if (inputChoice == 0) {
         return "Date Int";
     } else if (inputChoice == 1) {
-        return "Cumulative Tests";
+        return "Total Cumulative Tests Performed to Date";
     } else if (inputChoice == 2) {
-        return "Change in Total Tests";
+        return "Tests Performed";
     } else if (inputChoice == 3) {
-        return "Cumulative Tests per Thousand";
+        return "Total Cumulative Tests Performed to Date per Thousand People of the Country's Population";
     } else if (inputChoice == 4) {
-        return "Change in Total Tests per Thousand";
+        return "Tests Performed per Thousand People of the Country's Population";
     }
 }

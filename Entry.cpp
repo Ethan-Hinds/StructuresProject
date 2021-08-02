@@ -1,6 +1,7 @@
 #include "Entry.hpp"
 #include <string>
 #include <regex>
+#include <iostream>
 
 using namespace std;
 
@@ -18,11 +19,12 @@ Entry::Entry(string country, string dateStr, int changeInTotal, int total, float
 
 // Converts a date in m/d/yy format into days...sort of
 // Converts it into the number of days since January 1, 2000, disregarding leap years
-// Entry objects with a smaller dateInt are earlier in time
+// It's primitive, but it works for our purposes.  Entry objects with a smaller dateInt is earlier in time
 
 int Entry::dateStrToInt(string& dateStr) {
     // Regex :) Admire its beauty
     regex dateExp("(\\d+)\\/(\\d+)\\/(\\d+)");
+    
     smatch m;
     regex_search(dateStr, m, dateExp);
     int month = stoi(m[1]);
@@ -35,5 +37,17 @@ int Entry::dateStrToInt(string& dateStr) {
         days += monthLengths[i];
     }
     return days;
+}
+
+// Prints some information about the entry
+void Entry::PrintEntry() {
+    cout << endl;
+    cout << "Country: " << country << endl;
+    cout << "Date: " << dateStr << endl;
+    cout << "Tests performed on date in question: " << changeInTotal << endl;
+    cout << "Total cumulative tests performed to date: " << total << endl;
+    
+    cout << "Tests performed on date in question per thousand people of the country's population: " << changeInTotalPerThou << endl;
+    cout << "Total cumulative tests performed to date per thousand people of the country's population: " << totalPerThou << endl;
 }
 

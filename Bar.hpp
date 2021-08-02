@@ -7,20 +7,21 @@ using namespace std;
 
 class Bar {
 public:
+    // Position and size properties
     float x;
     float y;
     float width;
     float height;
-    Entry* entry;
+    Entry* entry; // The Entry associated with this bar
     Bar(Entry* entry, sf::Color color, int inputChoice, int graphBottom);
     void show(sf::RenderWindow& window);
     float Selection(Entry* entry, int& inputChoice);
     
 private:
     
-    float currentY;
-    float currentHeight;
-    int graphBottom;
+    float currentY; // Used for the animation
+    float currentHeight; // Used for the animation
+    int graphBottom; // Used for the animation
     
     sf::Color color;
     sf::Text valueText;

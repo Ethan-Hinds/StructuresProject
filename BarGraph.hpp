@@ -22,12 +22,12 @@ private:
     int width;
     int height;
     
-    vector<Bar*> bars;
-    vector<Entry*> data;
-    int inputChoice;
+    vector<Bar*> bars; // Vector that stores each "bar"
+    vector<Entry*> data; // Stores the entry data
+    int inputChoice; // Input choice for deciding what to plot
     
-    sf::Color colors[5];
-    sf::Font font;
+    sf::Color colors[5]; // Colors of the bars
+    sf::Font font; // Font
     sf::Text axesTexts[4];  // Text for axis labels and amounts
     
     vector<sf::Text> legendTexts;   // Text for the legend
@@ -38,6 +38,7 @@ private:
     float Selection(Entry* entry, int& inputChoice);
     void setLegend(sf::RenderWindow& window);
     void setTextLabels();
+    string selectionText(int inputChoice);
 };
 
 

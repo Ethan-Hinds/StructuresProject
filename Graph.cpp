@@ -134,6 +134,7 @@ void Graph::show(sf::RenderWindow& window) {
     }
 }
 
+// Destructor
 Graph::~Graph() {
     for (auto& line : lines) {
         for (auto& point : line) {
@@ -143,6 +144,7 @@ Graph::~Graph() {
 }
 
 
+// Set the legend text and the legend boxes
 void Graph::setLegend(sf::RenderWindow& window) {
     int i = 0;
     for (auto& line : lines) {
@@ -165,6 +167,7 @@ void Graph::setLegend(sf::RenderWindow& window) {
     }
 }
 
+// Set the axis label texts
 void Graph::setTextLabels() {
     sf::Text maxValText;
     maxValText.setFont(font);
@@ -233,11 +236,12 @@ void Graph::setTextLabels() {
 }
 
 
-
+// Map a value linearly from between min1 and max1 to min2 and max2.  Used for scaling the x and y axes
 float Graph::mapVal(int x, int min1, int max1, int min2, int max2) {
     return min2 + (((float) max2 - min2) / (max1 - min1)) * (x - min1);
 }
 
+// Formats an integers with commas every 3 digits
 string Graph::formatWithCommas (int n) {
     string result = "";
     string num = to_string(n);
@@ -257,6 +261,7 @@ string Graph::formatWithCommas (int n) {
     return result;
 }
 
+// Returns the distance between (x1, y1) and (x2, and y2)
 float Graph::dist(float x1, float y1, float x2, float y2) {
     return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 }
