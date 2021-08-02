@@ -73,18 +73,7 @@ int main() {
     }
     vector<vector<Entry*>> data = { v1, v2, v3, v4, v5 };
     //graphData(data);
-    /*BTreeNode* head = nullptr;
-    int choice = 1;
-    head = head->InsertEntry(v1[0], head, choice);
-    head = head->InsertEntry(v1[1], head, choice);
-    head = head->InsertEntry(v1[2], head, choice);
-
-
-    head->keyList[0]->PrintEntry();
-
-    //head->keyList[0]->PrintEntry();
-    //head->keyList[1]->PrintEntry();
-    //head->keyList[2]->PrintEntry();*/
+    
 
     vector<Entry*> vTest;
 
@@ -115,6 +104,74 @@ int main() {
         for (int i = 0; i < iter->second.size(); i++) {
             iter->second[i]->PrintEntry();
         }
+    }
+
+
+    bool isRun = true;
+    bool correctInput = true;
+
+    string userChoice;
+
+    while (isRun) {
+        if (correctInput) {
+            cout << "Type the following integer to select menu option: " << endl;
+            cout << "1. Print a Data Entry Based on Country and Date" << endl;
+            cout << "2. Print a Ranking of Data Entries for a specific date based on User Selected Criteria" << endl;
+            cout << "3. Compare Timelines of up to 5 Countries based on Cumulative Test Cases Performed per Thousand" << endl;
+            cout << "4. Print a Ranking of which Countries were Quickest to Respond Based on First Reported Testing Date" << endl;
+            cout << "5. End Program" << endl;
+        }
+
+        cin >> userChoice;
+
+        correctInput = true;
+
+        if (userChoice == "1") {
+            bool run1 = true;
+            while (run1) {
+                cout << "Please Type a Country: ";
+                cin >> userChoice;
+                string selCountry = userChoice;
+                cout << endl << "Please Input a Date in the form MM/DD/YY (Please note don't include any leading zeros): ";
+                cin >> userChoice;
+                string selDate = userChoice;
+
+                int i = 0;
+                while (i < entries.size()) {
+                    if (entries[i]->country == selCountry) {
+                        if (entries[i]->dateStr == selDate) {
+                            cout << endl;
+                            entries[i]->PrintEntry();
+                            cout << endl;
+                            run1 = false;
+                            break;
+                        }
+                    }
+                    i++;
+                }
+                if (i == entries.size()) {
+                    cout << "Data not found Please Try Again" << endl;
+                }
+            }
+        }
+        else if (userChoice == "2") {
+
+        }
+        else if (userChoice == "3") {
+
+        }
+        else if (userChoice == "4") {
+
+        }
+        else if (userChoice == "5") {
+            isRun = false;
+        }
+        else {
+            cout << "Input not recognized please try again" << endl;
+            correctInput = false;
+        }
+
+
     }
 
 }
