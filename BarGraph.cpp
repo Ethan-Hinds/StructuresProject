@@ -7,6 +7,8 @@
 
 using namespace std;
 
+string selectionText(int inputChoice);
+
 BarGraph::BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& window) {
     
     this->inputChoice = inputChoice;
@@ -144,6 +146,15 @@ void BarGraph::setTextLabels() {
     midText.setPosition(x - bounds.width - 10, y + height/2 - bounds.height/2);
     axesTexts[2] = midText;
     
+    sf::Text dateText;
+    dateText.setFont(font);
+    dateText.setString(data.at(0)->dateStr + ": " + selectionText(inputChoice));
+    dateText.setCharacterSize(20);
+    dateText.setFillColor(sf::Color::Black);
+    bounds = dateText.getLocalBounds();
+    dateText.setPosition(x + width/2 - bounds.width/2, y + height + bounds.height/2 + 10);
+    axesTexts[3] = dateText;
+    
 }
 
 
@@ -204,4 +215,18 @@ float BarGraph::Selection(Entry* entry, int& inputChoice) {
     else if (inputChoice == 2) { return (float)entry->changeInTotal; }
     else if (inputChoice == 3) { return entry->totalPerThou; }
     else if (inputChoice == 4) { return entry->changeInTotalPerThou; }
+}
+
+string selectionText(int inputChoice) {
+    if (inputChoice == 0) {
+        return "Date Int";
+    } else if (inputChoice == 1) {
+        return "Cumulative Tests";
+    } else if (inputChoice == 2) {
+        return "Change in Total Tests";
+    } else if (inputChoice == 3) {
+        return "Cumulative Tests per Thousand";
+    } else if (inputChoice == 4) {
+        return "Change in Total Tests per Thousand";
+    }
 }

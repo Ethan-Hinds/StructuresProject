@@ -28,7 +28,7 @@ private:
     
     sf::Color colors[5];
     sf::Font font;
-    sf::Text axesTexts[3];  // Text for axis labels and amounts
+    sf::Text axesTexts[4];  // Text for axis labels and amounts
     
     vector<sf::Text> legendTexts;   // Text for the legend
     vector<sf::RectangleShape> legendBoxes; // Colored boxes for the legend
@@ -38,7 +38,6 @@ private:
     float Selection(Entry* entry, int& inputChoice);
     void setLegend(sf::RenderWindow& window);
     void setTextLabels();
-    
 };
 
 
