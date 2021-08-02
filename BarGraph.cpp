@@ -10,10 +10,11 @@ using namespace std;
 // Text for labeling the graph beneath the x axis
 string selectionText(int inputChoice);
 
-BarGraph::BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& window) {
+BarGraph::BarGraph(vector<Entry*>& data, int lowerLimit, int inputChoice, sf::RenderWindow& window) {
     
     this->inputChoice = inputChoice;
     this->data = data;
+    this->lowerLimit = lowerLimit;
     
     // Set the position and size of the graph.  Yes they're hard coded (sad face)
     x = 150;
@@ -96,8 +97,9 @@ BarGraph::~BarGraph() {
 
 // Sets the legend boxes and the legend text
 void BarGraph::setLegend(sf::RenderWindow& window) {
-    int i = 0;
-    for (auto& bar : bars) {
+    
+    for (int i = 0; i < bars.size(); i += 1) {
+        Bar* bar = bars[i];
         sf::Color color = colors[i];
         float boxX = x + width + 20;
         float boxY = y + 40*i;
@@ -108,12 +110,11 @@ void BarGraph::setLegend(sf::RenderWindow& window) {
 
         sf::Text text;
         text.setFont(font);
-        text.setString(bar->entry->country);
+        text.setString(to_string(i+1+lowerLimit) + ".  " + bar->entry->country);
         text.setCharacterSize(14);
         text.setFillColor(sf::Color::Black);
         text.setPosition(boxX + 30, boxY);
         legendTexts.push_back(text);
-        i += 1;
     }
 }
 

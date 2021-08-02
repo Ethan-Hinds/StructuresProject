@@ -10,7 +10,7 @@ using namespace std;
 
 class BarGraph {
 public:
-    BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& window);
+    BarGraph(vector<Entry*>& data, int lowerLimit, int inputChoice, sf::RenderWindow& window);
     void show(sf::RenderWindow& window);
     
     ~BarGraph();
@@ -21,6 +21,8 @@ private:
     int y;
     int width;
     int height;
+    
+    int lowerLimit;
     
     vector<Bar*> bars; // Vector that stores each "bar"
     vector<Entry*> data; // Stores the entry data
