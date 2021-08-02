@@ -116,8 +116,8 @@ int main() {
         if (correctInput) {
             cout << "Type the following integer to select menu option: " << endl;
             cout << "1. Print a Data Entry Based on Country and Date" << endl;
-            cout << "2. Print a Ranking of Data Entries for a specific date based on User Selected Criteria" << endl;
-            cout << "3. Compare Timelines of up to 5 Countries based on Cumulative Test Cases Performed per Thousand" << endl;
+            cout << "2. Print a Ranking of Data Entries for a Specific Date based on User Selected Criteria" << endl;
+            cout << "3. Compare Timelines of up to 5 Countries based on User Selected Criteria" << endl;
             cout << "4. Print a Ranking of which Countries were Quickest to Respond Based on First Reported Testing Date" << endl;
             cout << "5. End Program" << endl;
         }
@@ -155,7 +155,74 @@ int main() {
             }
         }
         else if (userChoice == "2") {
+            bool run2 = true;
+            while (run2) {
+                cout << endl << "Please Input a Date in the form MM/DD/YY (Please note don't include any leading zeros): ";
+                cin >> userChoice;
+                string selDate = userChoice;
+                vector<Entry*> dateList;
+                int i = 0;
+                while (i < entries.size()) {
+                    if (entries[i]->dateStr == selDate) {
+                        dateList.push_back(entries[i]);
+                    }
+                    i++;
+                }
+                run2 = false;
+                if (dateList.empty()) {
+                    cout << "Data not found Please Try Again" << endl;
+                    run2 = true;
+                }
+                else {
+                    cout << "Please Select a Value to Sort By:" << endl;
+                    cout << "1. Tests Performed on Date in Question" << endl;
+                    cout << "2. Total Cumulative Tests Performed to Date" << endl;
+                    cout << "3. Tests Performed on Date in Question per Thousand People of the Country's Population" << endl;
+                    cout << "4. Total Cumulative Tests Performed to Date per Thousand People of the Country's Population" << endl;
 
+                    int choice;
+
+                    bool run22 = true;
+
+                    while (run22) {
+                        run22 = false;
+                        cin >> userChoice;
+                        if (userChoice == "1") {
+                            choice = 2;
+                        }
+                        else if (userChoice == "2") {
+                            choice = 1;
+                        }
+                        else if (userChoice == "3") {
+                            choice = 4;
+                        }
+                        else if (userChoice == "4") {
+                            choice = 3;
+                        }
+                        else {
+                            run22 = true;
+                            cout << "Input not recognized please try again" << endl;
+                        }
+                    }
+
+                    vector<Entry*> dateListMerge = dateList;
+
+                    mergeSort(dateListMerge, 0, dateListMerge.size() - 1, choice);
+
+                    map<float, vector<Entry*>> dateMap;
+
+                    generateMap(dateMap, dateList, choice);
+
+                    quickSort(dateList, 0, dateList.size() - 1, choice);
+
+                    for (int i = 0; i < dateList.size(); i++) {
+                        cout << dateList[i]->country << ": " << Selection(dateList[i], choice) << endl;
+                    }
+
+
+
+                }
+            }
         }
         else if (userChoice == "3") {
 
