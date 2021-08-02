@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 #include "Entry.h"
-#include "BTreeNode.h"
+#include "BarGraph.hpp"
 
 
 using namespace std;
@@ -21,10 +21,12 @@ void mergeSort(vector<Entry*>& arr, int left, int right, int choice);
 void quickSort(vector<Entry*>& arr, int low, int high, int choice);
 int split(vector<Entry*>& arr, int low, int high, int choice);
 void generateMap(map<float, vector<Entry*>>& map, vector<Entry*>& arr, int choice);
+void barGraphData(vector<Entry*>& data, int inputChoice);
 
 
 // Declare any global variables here
-//Graph* graph = nullptr;
+Graph* graph = nullptr;
+BarGraph* barGraph = nullptr;
 
 
 int main() {
@@ -269,6 +271,28 @@ void loadData(string filePath, vector<Entry*>& entries) {
             entries.push_back(entry);
         }
     }
+}
+
+void barGraphData(vector<Entry*>& data, int inputChoice) {
+    // Initialize SFML window size and window
+    int windowWidth = 1200;
+    int windowHeight = 600;
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Data Visualization", sf::Style::Titlebar | sf::Style::Close);
+    // Initialize graph object
+    barGraph = new BarGraph(data, inputChoice, window);
+    
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+        window.clear(sf::Color(255, 255, 255));
+        barGraph->show(window);
+        window.display();
+    }
+    delete barGraph;
 }
 
 
