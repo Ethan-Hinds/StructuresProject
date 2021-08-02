@@ -3,13 +3,18 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
-Bar::Bar(Entry* entry, sf::Color color, int inputChoice) {
+Bar::Bar(Entry* entry, sf::Color color, int inputChoice, int graphBottom) {
     this->entry = entry;
     this->color = color;
     this->inputChoice = inputChoice;
+    
+    this->graphBottom = graphBottom;
+    this->currentY = graphBottom;
+    this->currentHeight = 0;
     
     if (!font.loadFromFile("sansation.ttf")) {
         std::cout << "Error loading font" << endl;
@@ -24,14 +29,55 @@ Bar::Bar(Entry* entry, sf::Color color, int inputChoice) {
 
 void Bar::show(sf::RenderWindow& window) {
     
-    sf::RectangleShape rectangle(sf::Vector2f(width, height));
-    rectangle.setPosition(x, y);
+    sf::RectangleShape rectangle(sf::Vector2f(width, currentHeight));
+    rectangle.setPosition(x, currentY);
     rectangle.setFillColor(color);
     window.draw(rectangle);
     
+    if (abs(currentY - y) < 1) {
+        currentY = y;
+        currentHeight = height;
+        valueText.setString(formatWithCommas(Selection(entry, inputChoice)));
+    } else {
+        string targetString = formatWithCommas((Selection(entry, inputChoice)));
+        int decimals = 0;
+        for (int i = targetString.length()-1; i >= 0; i -= 1) {
+            if (targetString[i] != '.') {
+                decimals += 1;
+            } else {
+                break;
+            }
+        }
+        if (decimals == targetString.length()) {
+            decimals = 0;
+        }
+        
+        string currentString = formatWithCommas(mapVal(currentY, graphBottom, y, 0, Selection(entry, inputChoice)));
+        
+        int periodIndex = -1;
+        for (int i = 0; i < currentString.length(); i += 1) {
+            if (currentString[i] == '.') {
+                periodIndex = i;
+                break;
+            }
+        }
+        if (periodIndex != -1) {
+            try {
+                currentString = currentString.substr(0, periodIndex + decimals + 1);
+            } catch (const exception& e) {
+                
+            }
+        }
+        
+        valueText.setString(currentString);
+    }
+    
     sf::FloatRect bounds = valueText.getLocalBounds();
-    valueText.setPosition(x + width/2 - bounds.width/2, y - 30);
+    valueText.setPosition(x + width/2 - bounds.width/2, currentY - 30);
     window.draw(valueText);
+    
+    currentY -= (currentY - y) * 0.005;
+    currentHeight = graphBottom - currentY;
 }
 
 float Bar::Selection(Entry* entry, int& inputChoice) {
@@ -88,3 +134,6 @@ string Bar::formatWithCommas (float n) {
     return result;
 }
 
+float Bar::mapVal(float x, float min1, float max1, float min2, float max2) {
+    return min2 + (((float) max2 - min2) / (max1 - min1)) * (x - min1);
+}

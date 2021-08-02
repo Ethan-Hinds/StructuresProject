@@ -32,7 +32,7 @@ BarGraph::BarGraph(vector<Entry*>& data, int inputChoice, sf::RenderWindow& wind
     
     int count = 0;
     for (auto& entry : data) {
-        Bar* bar = new Bar(entry, colors[count], inputChoice);
+        Bar* bar = new Bar(entry, colors[count], inputChoice, y + height);
         bars.push_back(bar);
         bar->x = x + barWidth * count + 10;
         bar->y = mapVal(Selection(entry, inputChoice), 0, maxVal, y + height, y);
