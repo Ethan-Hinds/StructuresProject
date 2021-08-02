@@ -7,12 +7,14 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <chrono>
 #include "Entry.hpp"
 #include "BarGraph.hpp"
 #include "Graph.hpp"
 
 
 using namespace std;
+using namespace std::chrono;
 
 // Declare any methods in the main file here, before implementing them below
 void loadData(string filePath, vector<Entry*>& entries, set<string>& uniqueCountries);
@@ -41,51 +43,6 @@ int main() {
         return 0;
     }
     cout << "done" << endl;
-    
-    for (auto& it : uniqueCountries) {
-        cout << it << endl;
-    }
-    
-    // The entries are loaded into the entries vector, and can now be accessed.
-    //cout << entries.at(0)->country << endl;
-    //cout << entries.at(0)->dateStr << endl;
-    //cout << entries.at(1)->total << endl;
-    
-    
-    
-    // The code below is just some sample code I left in place to demonstrate the graphing feature
-    // Feel free to delete it. I have it saved
-    // Currently graphs these random countries I chose
-    // Can graph up to 5 countries at once
-    
-//    vector<Entry*> v1;
-//    vector<Entry*> v2;
-//    vector<Entry*> v3;
-//    vector<Entry*> v4;
-//    vector<Entry*> v5;
-//
-//    for (auto& it : entries) {
-//        if (it->country == "Albania") {
-//            v1.push_back(it);
-//        }
-//        else if (it->country == "Argentina") {
-//            v2.push_back(it);
-//        }
-//        else if (it->country == "Norway") {
-//            v3.push_back(it);
-//        }
-//        else if (it->country == "Bangladesh") {
-//            v4.push_back(it);
-//        }
-//        else if (it->country == "Estonia") {
-//            v5.push_back(it);
-//        }
-//    }
-//    vector<vector<Entry*>> data = { v1, v2, v3, v4, v5 };
-//    //graphData(data);
-    
-    
-    
     
     bool isRun = true;
     bool correctInput = true;
@@ -187,13 +144,31 @@ int main() {
                     
                     vector<Entry*> dateListMerge = dateList;
                     
+                    auto mergeStart = high_resolution_clock::now();
                     mergeSort(dateListMerge, 0, dateListMerge.size() - 1, choice);
+                    auto mergeStop = high_resolution_clock::now();
                     
+                    auto mapStart = high_resolution_clock::now();
                     map<float, vector<Entry*>> dateMap;
-                    
                     generateMap(dateMap, dateList, choice);
+                    auto mapStop = high_resolution_clock::now();
                     
+                    
+                    auto quickSortStart = high_resolution_clock::now();
                     quickSort(dateList, 0, dateList.size() - 1, choice);
+                    auto quickSortStop = high_resolution_clock::now();
+                    
+                    
+                    auto mergeDuration = duration_cast<microseconds>(mergeStop - mergeStart);
+                    auto mapDuration = duration_cast<microseconds>(mapStop - mapStart);
+                    auto quickSortDuration = duration_cast<microseconds>(quickSortStop - quickSortStart);
+                    
+                    cout << endl;
+                    cout << "Merge Sort runtime: " << mergeDuration.count() << " microseconds" << endl;
+                    cout << "Quick Sort runtime: " << quickSortDuration.count() << " microseconds" << endl;
+                    cout << "Map generation runtime: " << mapDuration.count() << " microseconds" << endl;
+                    cout << endl;
+                    
                     
                     int lowerLimit;
                     int upperLimit;
@@ -324,6 +299,76 @@ int main() {
             
         }
         else if (userChoice == "4") {
+            
+            vector<Entry*> data;
+            set<string> countriesUsed;
+            for (auto& entry : entries) {
+                if (countriesUsed.count(entry->country) == 0) {
+                    countriesUsed.insert(entry->country);
+                    data.push_back(entry);
+                }
+            }
+            
+            vector<Entry*> dateListMerge = data;
+            
+            auto mergeStart = high_resolution_clock::now();
+            mergeSort(dateListMerge, 0, dateListMerge.size() - 1, 0);
+            auto mergeStop = high_resolution_clock::now();
+            
+            auto mapStart = high_resolution_clock::now();
+            map<float, vector<Entry*>> dateMap;
+            generateMap(dateMap, data, 0);
+            auto mapStop = high_resolution_clock::now();
+            
+            
+            auto quickSortStart = high_resolution_clock::now();
+            quickSort(data, 0, data.size() - 1, 0);
+            auto quickSortStop = high_resolution_clock::now();
+            
+            
+            auto mergeDuration = duration_cast<microseconds>(mergeStop - mergeStart);
+            auto mapDuration = duration_cast<microseconds>(mapStop - mapStart);
+            auto quickSortDuration = duration_cast<microseconds>(quickSortStop - quickSortStart);
+            
+            cout << endl;
+            cout << "Merge Sort runtime: " << mergeDuration.count() << " microseconds" << endl;
+            cout << "Quick Sort runtime: " << quickSortDuration.count() << " microseconds" << endl;
+            cout << "Map generation runtime: " << mapDuration.count() << " microseconds" << endl;
+            cout << endl;
+            
+            
+            int lowerLimit;
+            int upperLimit;
+            
+            while (true) {
+                
+                cout << "Please select a range of ranks to evaluate: (1 - " << (uniqueCountries.size()-1) << ") " << endl;
+                cout << "Lower limit: ";
+                string lowerLimitStr;
+                cin >> lowerLimitStr;
+                cout << endl << "Upper limit: ";
+                string upperLimitStr;
+                cin >> upperLimitStr;
+                cout << endl;
+                
+                lowerLimit = stoi(lowerLimitStr) - 1;
+                upperLimit = stoi(upperLimitStr);
+                
+                if (lowerLimit < 0 || upperLimit < 0) {
+                    cout << "Please enter a valid range!" << endl << endl;
+                    continue;
+                }
+                if (upperLimit >= dateListMerge.size()) {
+                    cout << "Please enter a valid range!" << endl << endl;
+                    continue;
+                }
+                break;
+                
+            }
+            
+            for (int i = lowerLimit; i < upperLimit; i += 1) {
+                cout << (i+1) << ".  " << dateListMerge[i]->country << ": " << dateListMerge[i]->dateStr << endl;
+            }
             
         }
         else if (userChoice == "5") {
