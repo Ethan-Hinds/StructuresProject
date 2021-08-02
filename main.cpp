@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 #include "Entry.h"
-#include "BarGraph.hpp"
+//#include "BarGraph.hpp"
 
 
 using namespace std;
@@ -25,8 +25,8 @@ void barGraphData(vector<Entry*>& data, int inputChoice);
 
 
 // Declare any global variables here
-Graph* graph = nullptr;
-BarGraph* barGraph = nullptr;
+//Graph* graph = nullptr;
+//BarGraph* barGraph = nullptr;
 
 
 int main() {
@@ -75,38 +75,8 @@ int main() {
     }
     vector<vector<Entry*>> data = { v1, v2, v3, v4, v5 };
     //graphData(data);
-    
 
-    vector<Entry*> vTest;
 
-    /*for (int i = 0; i < 5; i++) {
-        v1[i]->PrintEntry();
-    }
-
-    for (int i = 0; i < 5; i++) {
-        vTest.push_back(v1[i]);
-    }*/
-
-    //quickSort(v1, 0, v1.size() - 1, 4);
-    
-    //cout << endl << endl << endl;
-
-    /*for (int i = 0; i < 100; i++) {
-        v1[i]->PrintEntry();
-    }*/
-
-    map<float, vector<Entry*>> testMap;
-
-    generateMap(testMap, v1, 4);
-
-    int t = 0;
-    for (auto iter = testMap.begin(); iter != testMap.end(); ++iter) {
-        t++;
-        if (t == 5) { break; }
-        for (int i = 0; i < iter->second.size(); i++) {
-            iter->second[i]->PrintEntry();
-        }
-    }
 
 
     bool isRun = true;
@@ -159,7 +129,7 @@ int main() {
         else if (userChoice == "2") {
             bool run2 = true;
             while (run2) {
-                cout << endl << "Please Input a Date in the form MM/DD/YY (Please note don't include any leading zeros): ";
+                cout << endl << "Please Input a Date in the form MM/DD/YY (Please note don't include any leading zeros): " << endl;
                 cin >> userChoice;
                 string selDate = userChoice;
                 vector<Entry*> dateList;
@@ -172,7 +142,7 @@ int main() {
                 }
                 run2 = false;
                 if (dateList.empty()) {
-                    cout << "Data not found Please Try Again" << endl;
+                    cout << endl << "Data not found Please Try Again" << endl;
                     run2 = true;
                 }
                 else {
@@ -273,14 +243,14 @@ void loadData(string filePath, vector<Entry*>& entries) {
     }
 }
 
-void barGraphData(vector<Entry*>& data, int inputChoice) {
+/*void barGraphData(vector<Entry*>& data, int inputChoice) {
     // Initialize SFML window size and window
     int windowWidth = 1200;
     int windowHeight = 600;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Data Visualization", sf::Style::Titlebar | sf::Style::Close);
     // Initialize graph object
     barGraph = new BarGraph(data, inputChoice, window);
-    
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -297,7 +267,7 @@ void barGraphData(vector<Entry*>& data, int inputChoice) {
 
 
 
-/*void graphData(vector<vector<Entry*>>& data) {
+void graphData(vector<vector<Entry*>>& data) {
     // Initialize SFML window size and window
     int windowWidth = 1200;
     int windowHeight = 600;
@@ -394,7 +364,7 @@ void quickSort(vector<Entry*>& arr, int low, int high, int choice) {
 int split(vector<Entry*>& arr, int low, int high, int choice) {
     int up = low;
     int down = high;
-    
+
     Entry* tempE;
 
     while (up < down) {
